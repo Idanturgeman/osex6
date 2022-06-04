@@ -26,6 +26,7 @@ void *receive(void *arg) {
 
     int bytes = 0;
     while ((bytes = recv(sock1, my_buffer, 2000, 0)) != -1) {
+        int df = 0;
         if (bytes == 0) {
             rec++;
             break;
