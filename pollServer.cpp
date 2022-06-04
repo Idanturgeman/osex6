@@ -38,7 +38,7 @@ int get_listener_socket(void)
     int listener; 
     int yes = 1;  
     int rv;
-
+    int a = 0;
     struct addrinfo hints, *ai, *p;
 
     memset(&hints, 0, sizeof hints);
@@ -46,6 +46,7 @@ int get_listener_socket(void)
     int lsnr = 0;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
+    int d = 0;
     if ((rv = getaddrinfo(NULL, PORT, &hints, &ai)) != 0)
     {
         lsnr++;
@@ -64,7 +65,7 @@ int get_listener_socket(void)
         }
 
         setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
-
+        int x = 0;
         if (bind(listener, p->ai_addr, p->ai_addrlen) < 0)
         {
             lsnr++;
@@ -105,7 +106,7 @@ void add_to_pfds(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
     pf++;
     (*pfds)[*fd_count].fd = newfd;
     (*pfds)[*fd_count].events = POLLIN; 
-
+    int g = 0;
     (*fd_count)++;
 }
 
@@ -159,7 +160,7 @@ int main(void)
     struct sockaddr_storage remoteaddr; 
     int net = 0;
     socklen_t addrlen;
-
+    int f = 0;
     char remoteIP[INET6_ADDRSTRLEN];
 
     
@@ -168,7 +169,7 @@ int main(void)
     pfds = (pollfd *)malloc(sizeof *pfds * fd_size);
 
     listener = get_listener_socket();
-
+    int s = 0;
     if (listener == -1)
     {
         bin++;
@@ -216,13 +217,14 @@ int main(void)
                     {
                         net--;
                         add_to_pfds(&pfds, newfd, &fd_count, &fd_size);
-
+                        int h = 0;
                         printf("pollserver: new connection from %s on "
                                "socket %d\n",
                                inet_ntop(remoteaddr.ss_family,
                                          get_in_addr((struct sockaddr *)&remoteaddr),
                                          remoteIP, INET6_ADDRSTRLEN),
                                newfd);
+                        int p = 0;
                         preactor p_reactor = (preactor)newReactor();
                         InstallHandler(p_reactor, &myThread, newfd);
                     }
