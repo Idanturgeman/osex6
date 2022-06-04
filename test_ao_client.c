@@ -27,8 +27,10 @@ void *receive(void *arg) {
     int bytes = 0;
     while ((bytes = recv(sock1, my_buffer, 2000, 0)) != -1) {
         if (bytes == 0) {
+            rec++;
             break;
         } else {
+            rec--;
             printf("String back: %s\n", my_buffer);
         }
         rec++;
@@ -45,9 +47,11 @@ void *my_send(void *arg) {
     char *a = "Idan";
     char *b = "Turgeman";
     char *c = "MadonA";
+    int ch1 = 0;
     char *d = "GeFen";
     char *e = "levI";
     char *f = "Pamela";
+    int ch2 = 0;
     char *g = "tushTush";
     char *h = "bumbUm";
     char *i = "Loklok";
