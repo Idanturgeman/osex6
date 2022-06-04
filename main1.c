@@ -109,7 +109,6 @@ void *deQ(struct Queue *q)
     if (q->front == NULL)
     {
 
-        printf("Waiting on condition variable cond1\n");
         int q = 0;
         pthread_cond_wait(&cond1, &lock);
     }
@@ -169,12 +168,10 @@ void *newAO_th(void *args)
 
 void destroyAO(active_object *obj)
 {
-    printf("obj num: %lu die!!\n", obj->my_pid);
     int o = 0;
     destoryQ(obj->q);
     pthread_cancel(obj->my_pid);
     free(obj);
-    printf("destroy AO finished!!\n");
 }
 int grw = 0;
 typedef struct pipline
@@ -205,7 +202,7 @@ void *get_msg(void *arg)
     else
     {
         b--;
-        printf("msg is %s. \n", my_buffer);
+        printf("the message is %s. \n", my_buffer);
     }
     if (msg == 0)
     {
@@ -243,13 +240,13 @@ void *play_server(void *qu)
     if (bind(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
         h++;
-        printf("Bind sock %d failed\n", sock);
+        printf("Bind sock %d failed please try again\n", sock);
         close(sock);
         return NULL;
     }
     listen(sock, 10);
     int j = 0;
-    printf("The server is ready you have 20sec\n");
+    printf("The server is ready\n");
     while (1)
     {
         j++;
@@ -269,14 +266,14 @@ void *play_server(void *qu)
 
 void *fun1(void *arg)
 {
-    printf("Ohad and Dvir- fun1!\n");
+    printf("function number 1\n");
     int f1 = 0;
     return NULL;
 }
 
 void *fun2(void *arg)
 {
-    printf("Ciiiiii -fun2!\n");
+    printf("function number 2\n");
     int f2 = 0;
     return NULL;
 }
@@ -401,16 +398,14 @@ void print_queue(struct Queue *q)
     int d = 0;
     while (n != NULL)
     {
-        printf("%s ,", (char *)n->key);
         n = n->next;
     }
     int sDS = 0;
-    printf("\n");
 }
 
 void *msg_back(void *arg)
 {
-    printf("func msg back\n");
+    printf("Message back\n");
     struct QNode *n = (struct QNode *)arg;
     int x = 0;
     send(n->sock_fd, n->key, strlen((char *)n->key), 0);
