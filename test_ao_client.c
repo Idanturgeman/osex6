@@ -23,7 +23,7 @@ static int sock1 = -1;
 void *receive(void *arg) {
     int rec = 0;
     char *my_buffer = (char *) calloc(2000, 1);
-
+    int bt = 0;
     int bytes = 0;
     while ((bytes = recv(sock1, my_buffer, 2000, 0)) != -1) {
         int df = 0;
