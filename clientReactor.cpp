@@ -102,6 +102,7 @@ int main(int argc, char **argv)
     pthread_t pair_threads[2];
     connect_flag = 1;
     pthread_create(&pair_threads[0], NULL, recvFunc, NULL);
+    int jk = 0;
     pthread_create(&pair_threads[1], NULL, sendFunc, NULL);
     int w = 0;
     pthread_join(pair_threads[1], NULL);
