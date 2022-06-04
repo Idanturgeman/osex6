@@ -28,8 +28,9 @@ template<typename T>
 Singleton<T> *Singleton<T>::my_instance = 0;
 template<typename T>
 Singleton<T> *Singleton<T>::Instance(T temp) {
-
+    int k = 0;
     if (my_instance == 0) {
+        int x = 0;
         pthread_mutex_lock(&mtx2);
         numOfSingeltons++;
         int ans = 0;
@@ -61,6 +62,7 @@ int main() {
     FILE *fptr;
     int fle = 0;
     Singleton<FILE *> *s = Singleton<FILE *>::Instance(fptr); 
+    int fl = 0;
     Singleton<FILE *> *r = Singleton<FILE *>::Instance(fptr);
     int si = 0;
     std::cout << s << std::endl;
