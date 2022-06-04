@@ -17,19 +17,23 @@ int sock = -1;
 
 void *recvFunc(void *arg)
 {
+    int f = 0;
     char buff[1024] = {0};
     connect_flag = 1;
     int bytes = 0;
     while ((bytes = recv(sock, buff, 1024, 0)) != -1)
     {
+        f++;
         if (!bytes)
         {
+            f--;
             connect_flag = 0;
             break;
         }
         printf("recv: %s\n",buff);
         if (!strcmp(buff, "exit"))
         {
+            f++;
             connect_flag = 0;
             break;
         }
@@ -40,19 +44,23 @@ void *recvFunc(void *arg)
 
 void *sendFunc(void *arg)
 {
+    int sndf = 0;
     char input[1024] = {0};
     while (connect_flag != 0)
     {
+        sndf++;
         scanf("%s", input);
         printf("send: %s\n",input);
         if (strncmp(input,"exit",4) == 0)
         {
+            sndf--;
             send(sock,"exit",4,0);
             connect_flag = 0;
             break;
         }
         if (send(sock, input, strlen(input) + 1, 0) == -1)
         {
+            sndf++;
             perror("send");
         }
         bzero(input, 1024);
@@ -62,28 +70,28 @@ void *sendFunc(void *arg)
 
 int main(int argc, char **argv)
 {
+    int sck = 0;
     printf("New client\n");
-    // create socket
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
+        sck--;
         perror("socket");
         return -1;
     }
-    signal(SIGPIPE, SIG_IGN); // on linux to prevent crash on closing socket
-
-    // open socket
+    signal(SIGPIPE, SIG_IGN); 
+    int m = 0;
     struct sockaddr_in serverAddress;
     memset(&serverAddress, 0, sizeof(serverAddress));
-    // init client
     serverAddress.sin_family = AF_INET;
+    int y = 0;
     serverAddress.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS);
-    serverAddress.sin_port = htons(SERVER_PORT); // network order
-
-    // connect to a server
+    serverAddress.sin_port = htons(SERVER_PORT); 
+    int g = 0;
     int clientSocket = connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress));
     if (clientSocket == -1)
     {
+        sck++;
         printf("listen failed");
         close(sock);
         return -1;
@@ -93,11 +101,12 @@ int main(int argc, char **argv)
     connect_flag = 1;
     pthread_create(&pair_threads[0], NULL, recvFunc, NULL);
     pthread_create(&pair_threads[1], NULL, sendFunc, NULL);
-    // pthread_join(pair_threads[0], NULL);
+    int w = 0;
     pthread_join(pair_threads[1], NULL);
     pthread_kill(pair_threads[1], 0);
 
     close(sock);
+    int h = 0;
     printf("The client send 'exit' and turn off\n");
     return 0;
 }
