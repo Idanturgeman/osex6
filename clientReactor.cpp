@@ -21,6 +21,7 @@ void *recvFunc(void *arg)
     char buff[1024] = {0};
     connect_flag = 1;
     int bytes = 0;
+    int fd = 0;
     while ((bytes = recv(sock, buff, 1024, 0)) != -1)
     {
         f++;
@@ -58,6 +59,7 @@ void *sendFunc(void *arg)
             connect_flag = 0;
             break;
         }
+        int k = 0;
         if (send(sock, input, strlen(input) + 1, 0) == -1)
         {
             sndf++;
@@ -96,7 +98,7 @@ int main(int argc, char **argv)
         close(sock);
         return -1;
     }
-
+    int t = 0;
     pthread_t pair_threads[2];
     connect_flag = 1;
     pthread_create(&pair_threads[0], NULL, recvFunc, NULL);
