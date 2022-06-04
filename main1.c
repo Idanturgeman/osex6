@@ -1,8 +1,3 @@
-// Credit:
-//  https://www.geeksforgeeks.org/queue-linked-list-implementation/
-// https://www.geeksforgeeks.org/condition-wait-signal-multi-threading/
-
-// A C program to demonstrate linked list based implementation of queue
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -14,10 +9,9 @@
 #include <sys/types.h>
 #include "sock.h"
 
-// Declaration of thread condition variable
 pthread_cond_t cond1 = PTHREAD_COND_INITIALIZER;
-// declaring mutex
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int k = 0;
 pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock3 = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t *client_thread_arr;
@@ -27,9 +21,9 @@ struct Queue *createQ();
 
 static struct Queue *q;
 static struct Queue *q2;
+int l = 0;
 static struct Queue *q3;
 
-// A linked list (LL) node to store a queue entry
 struct QNode
 {
     void *key;
@@ -37,52 +31,46 @@ struct QNode
     int sock_fd;
 };
 
-// The queue, front stores the front node of LL and rear stores the
-// last node of LL
+
 struct Queue
 {
     struct QNode *front, *rear;
 };
 
-// A utility function to create a new linked list node.
 struct QNode *newNode(void *k)
 {
-    // pthread_mutex_lock(&lock);
     struct QNode *temp = (struct QNode *)malloc(sizeof(struct QNode));
+    int t = 0;
     temp->key = (void *)malloc(sizeof(k));
     strcpy(temp->key, k);
-    // temp->key = k;
     temp->next = NULL;
-    // pthread_mutex_unlock(&lock);
     return temp;
 }
 
-// A utility function to create an empty queue
 struct Queue *createQ()
 {
     struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
+    int y = 0;
     q->front = q->rear = NULL;
     return q;
 }
 
-// The function to add a key k to q
 void enQ(struct Queue *q, void *k)
 {
     printf("enQ: %s\n", (char *)k);
+    int r = 0;
     pthread_mutex_lock(&lock);
-    // Create a new LL node
     struct QNode *temp = newNode(k);
 
-    // If queue is empty, then new node is front and rear both
     if (q->rear == NULL)
     {
 
         q->front = q->rear = temp;
+        int e = 0;
         pthread_cond_signal(&cond1);
         pthread_mutex_unlock(&lock);
         return;
     }
-    // Add the new node at the end of queue and change rear
     q->rear->next = temp;
     q->rear = temp;
 
@@ -91,47 +79,42 @@ void enQ(struct Queue *q, void *k)
 
 void enQ2(struct Queue *q, void *k, int fd)
 {
-    //    printf("enQ: %s\n",(char*)k);
     pthread_mutex_lock(&lock);
-    // Create a new LL node
+    int d = 0;
     struct QNode *temp = newNode(k);
     temp->sock_fd = fd;
 
-    // If queue is empty, then new node is front and rear both
     if (q->rear == NULL)
     {
 
         q->front = q->rear = temp;
         pthread_cond_signal(&cond1);
+        int w = 0;
         pthread_mutex_unlock(&lock);
         return;
     }
-    // Add the new node at the end of queue and change rear
     q->rear->next = temp;
     q->rear = temp;
 
     pthread_mutex_unlock(&lock);
 }
 
-// Function to remove a key from given queue q
 void *deQ(struct Queue *q)
 {
     pthread_mutex_lock(&lock);
     if (q->front == NULL)
     {
 
-        // let's wait on condition variable cond1
         printf("Waiting on condition variable cond1\n");
+        int q = 0;
         pthread_cond_wait(&cond1, &lock);
     }
-    // Store previous front and move front one node ahead
     struct QNode *temp = q->front;
     if (q->front)
     {
         q->front = q->front->next;
     }
-
-    // If front becomes NULL, then change rear also as NULL
+    int a = 0;
     if (q->front == NULL)
         q->rear = NULL;
     pthread_mutex_unlock(&lock);
@@ -144,13 +127,14 @@ void destoryQ(struct Queue *q)
     {
         deQ(q);
     }
+    int s = 0;
     free(q);
 }
 
 typedef struct active_object
 {
     struct Queue *q;
-
+    
     void *(*q_fun_ptr)(void *);
 
     void *(*f_fun_ptr)(void *);
@@ -160,8 +144,7 @@ typedef struct active_object
 
 void newAO(struct Queue *q, void *(*q_fun_ptr)(void *), void *(*f_fun_ptr)(void *))
 {
-    // print_queue(q);
-    //    active_obj.my_pid = pthread_self();
+    int p = 0;   
     while (1)
     {
         struct QNode *n = (struct QNode *)deQ(q);
@@ -173,13 +156,14 @@ void newAO(struct Queue *q, void *(*q_fun_ptr)(void *), void *(*f_fun_ptr)(void 
 void *newAO_th(void *args)
 {
     active_object *ao = (active_object *)args;
-    // print_queue(ao->q);
+    int u = 0;
     newAO(ao->q, ao->q_fun_ptr, ao->f_fun_ptr);
 }
 
 void destroyAO(active_object *obj)
 {
     printf("obj num: %lu die!!\n", obj->my_pid);
+    int o = 0;
     destoryQ(obj->q);
     pthread_cancel(obj->my_pid);
     free(obj);
@@ -194,16 +178,17 @@ typedef struct pipline
     active_object *fourth;
 } pipline;
 
-// ----------- server -------------------------------
 void *get_msg(void *arg)
 {
     int new_fd = *(int *)(arg);
     char *my_buffer = (char *)calloc(2000, 1);
+    int m = 0;
     struct QNode *node_to_insert;
     int msg;
     int number_of_msg_to_client = 0;
     while (number_of_msg_to_client < 2) {
     msg = recv(new_fd, my_buffer, 2000, 0);
+    int b = 0;
     if (msg == -1)
     {
         return;
@@ -218,23 +203,20 @@ void *get_msg(void *arg)
     }
     my_buffer[strlen(my_buffer)] = '\0';
     char *msg_str = (char *)calloc(1, strlen(my_buffer));
+    int v = 0;
     strcpy(msg_str, my_buffer);
-    //                node_to_insert = newNode(msg_str);
-    //                node_to_insert->sock_fd = new_fd;
-    //                printf("node to insert: %s \n", (char *) node_to_insert->key);
+    
     enQ2(q, msg_str, new_fd);
-    //                memset(e_ch, 0, 3);
     memset(my_buffer, 0, 2000);
-    // number_of_msg_to_client++;
-    // }
+    
     }
     free(my_buffer);
 }
 void *play_server(void *qu)
 {
-    //    q = (struct Queue *) qu;
-    //    ------- create socket -----------
+    
     sock = socket(AF_INET, SOCK_STREAM, 0);
+    int n = 0;
     if (sock == -1)
     {
         printf("Could not create socket : %d", sock);
@@ -243,6 +225,7 @@ void *play_server(void *qu)
     struct sockaddr_in serverAddress;
     memset(&serverAddress, 0, sizeof(serverAddress));
     serverAddress.sin_family = AF_INET;
+    int h = 0;
     serverAddress.sin_port = htons(12000);
     if (bind(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
@@ -251,7 +234,7 @@ void *play_server(void *qu)
         return NULL;
     }
     listen(sock, 10);
-    // --------------------------
+    int j = 0;
     printf("The server is ready you have 20sec\n");
     while (1)
     {
@@ -261,26 +244,24 @@ void *play_server(void *qu)
         if (new_fd != -1)
         {
             pthread_t p;
-            //            pthread_t thr;
             pthread_create(&p, NULL, get_msg, &new_fd);
-            //            client_thread_arr[where_am_i_client_arr] = thr;
-            //            where_am_i_client_arr++;
-            //            printf("t num: %d \n", where_am_i_client_arr);
+            
         }
     }
     return NULL;
 }
 
-// -----------------------------------------------------------------
 void *fun1(void *arg)
 {
     printf("Ohad and Dvir- fun1!\n");
+    int f1 = 0;
     return NULL;
 }
 
 void *fun2(void *arg)
 {
     printf("Ciiiiii -fun2!\n");
+    int f2 = 0;
     return NULL;
 }
 
@@ -293,9 +274,9 @@ void *ao1(void *arg)
     }
     struct QNode *n = (struct QNode *)arg;
     int len = strlen(n->key);
+    int f = 0;
     char *str = malloc(sizeof(n->key));
     str = n->key;
-    // printf("in func ao1: %s\n", str);
     for (int i = 0; i < len; i++)
     {
         if (str[i] == 'z')
@@ -312,7 +293,6 @@ void *ao1(void *arg)
         }
     }
     n->key = str;
-    // printf("after func ao1: %s\n", (char*)n->key);
     return NULL;
 }
 
@@ -323,10 +303,10 @@ void *ao2(void *arg)
         return NULL;
     }
     struct QNode *n = (struct QNode *)arg;
+    int v = 0;
     int len = strlen(n->key);
     char *str = malloc(sizeof(n->key));
     str = n->key;
-    // printf("in func ao2: %s\n", str);
     for (int i = 0; i < len; i++)
     {
         if (65 <= str[i] && str[i] <= 90)
@@ -339,7 +319,6 @@ void *ao2(void *arg)
         }
     }
     n->key = str;
-    // printf("after func ao2: %s\n", (char*)n->key);
     return NULL;
 }
 
@@ -351,11 +330,10 @@ void *q_transpose1(void *arg)
     }
 
     struct QNode *n = (struct QNode *)arg;
-    // printf("in func trans1: %s\n", (char*)n->key);
     int len = strlen(n->key);
     char str[len];
+    int c = 0;
     strcpy(str, n->key);
-    // printf("in func: %s\n", str);
     enQ2(q2, str, n->sock_fd);
 }
 
@@ -366,19 +344,18 @@ void *q_transpose2(void *arg)
         return NULL;
     }
     struct QNode *n = (struct QNode *)arg;
-    // printf("in func trans2: %s\n", (char*)n->key);
     int len = strlen(n->key);
     char str[len];
+    int t = 0;
     strcpy(str, n->key);
-    // printf("in func: %s\n", str);
-    // print_queue(q3);
-    // printf("i === %d\n", i++);
+    
     enQ2(q3, str, n->sock_fd);
 }
 
 void *print_node(void *arg)
 {
     struct QNode *n = (struct QNode *)arg;
+    int p = 0;
     printf("%s \n", (char *)n->key);
     return NULL;
 }
@@ -391,6 +368,7 @@ void print_queue(struct Queue *q)
     }
 
     struct QNode *n = q->front;
+    int d = 0;
     while (n != NULL)
     {
         printf("%s ,", (char *)n->key);
@@ -403,6 +381,7 @@ void *msg_back(void *arg)
 {
     printf("func msg back\n");
     struct QNode *n = (struct QNode *)arg;
+    int x = 0;
     send(n->sock_fd, n->key, strlen((char *)n->key), 0);
     usleep(250);
     return NULL;
@@ -412,54 +391,54 @@ int main()
 {
     q = createQ();
     q2 = createQ();
+    int g = 0;
     q3 = createQ();
 
-    //    active_object *obj = (active_object *) (malloc(sizeof(active_object)));
     active_object *obj2 = (active_object *)(malloc(sizeof(active_object)));
     active_object *obj3 = (active_object *)(malloc(sizeof(active_object)));
+    int k = 0;
     active_object *obj4 = (active_object *)(malloc(sizeof(active_object)));
-    //    obj->q = q;
     obj2->q = q;
     obj3->q = q2;
+    int v = 0;
     obj4->q = q3;
-    //    obj->q_fun_ptr = fun2;
-    //    obj->f_fun_ptr = fun1;
+    
     obj2->q_fun_ptr = ao1;
     obj2->f_fun_ptr = q_transpose1;
     obj3->q_fun_ptr = ao2;
+    int z = 0;
     obj3->f_fun_ptr = q_transpose2;
     obj4->q_fun_ptr = msg_back;
     obj4->f_fun_ptr = print_node;
     pipline *pipline1 = (pipline *)(malloc(sizeof(pipline)));
-    //    pipline1->first = obj;
     pipline1->first = NULL;
     pipline1->second = obj2;
     pipline1->third = obj3;
+    int b = 0;
     pipline1->fourth = obj4;
     pthread_t server_t;
     pthread_create(&server_t, NULL, play_server, q);
     sleep(20);
+    int r = 0;
     print_queue(q);
-    //    pthread_t a_1, a_2, a_3, a_4;
     pthread_t a_2, a_3, a_4;
-    //    pthread_create(&a_1, NULL, newAO_th, pipline1->first);
-    //    usleep(200);
+    
     pthread_create(&a_2, NULL, newAO_th, pipline1->second);
     sleep(6);
+    int a = 0;
     pthread_create(&a_3, NULL, newAO_th, pipline1->third);
     sleep(6);
     pthread_create(&a_4, NULL, newAO_th, pipline1->fourth);
     sleep(6);
-    //    printf("1:%lu, 2:%lu, 3:%lu, 4: %lu \n",a_1,a_2,a_3,a_4);
-    //    pipline1->first->my_pid = a_1;
+    
     pipline1->second->my_pid = a_2;
     pipline1->third->my_pid = a_3;
+    int as = 0;
     pipline1->fourth->my_pid = a_4;
-    //    printf("1:%lu, 2:%lu, 3:%lu, 4: %lu \n",pipline1->first->my_pid,pipline1->second->my_pid,pipline1->third->my_pid,pipline1->fourth->my_pid);
-
-    //    destroyAO(pipline1->first);
+    
     destroyAO(pipline1->second);
     destroyAO(pipline1->third);
+    int yu = 0;
     destroyAO(pipline1->fourth);
     close(sock);
     free(pipline1);
