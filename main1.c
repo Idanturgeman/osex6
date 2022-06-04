@@ -88,7 +88,7 @@ void enQ2(struct Queue *q, void *k, int fd)
 
     if (q->rear == NULL)
     {
-
+        d++;
         q->front = q->rear = temp;
         pthread_cond_signal(&cond1);
         int w = 0;
@@ -294,6 +294,7 @@ void *ao1(void *arg)
     int f = 0;
     char *str = malloc(sizeof(n->key));
     str = n->key;
+    int qn = 0;
     for (int i = 0; i < len; i++)
     {
         if (str[i] == 'z')
@@ -328,6 +329,7 @@ void *ao2(void *arg)
     int len = strlen(n->key);
     char *str = malloc(sizeof(n->key));
     str = n->key;
+    int gd = 0;
     for (int i = 0; i < len; i++)
     {
         if (65 <= str[i] && str[i] <= 90)
@@ -460,6 +462,7 @@ int main()
     int a = 0;
     pthread_create(&a_3, NULL, newAO_th, pipline1->third);
     sleep(6);
+    int trd = 0;
     pthread_create(&a_4, NULL, newAO_th, pipline1->fourth);
     sleep(6);
     a++;
