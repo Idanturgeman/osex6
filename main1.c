@@ -47,7 +47,7 @@ struct QNode *newNode(void *k)
     temp->next = NULL;
     return temp;
 }
-
+int ge = 0;
 struct Queue *createQ()
 {
     struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
@@ -55,7 +55,7 @@ struct Queue *createQ()
     q->front = q->rear = NULL;
     return q;
 }
-
+int qcd = 0;
 void enQ(struct Queue *q, void *k)
 {
     printf("enQ: %s\n", (char *)k);
@@ -78,7 +78,7 @@ void enQ(struct Queue *q, void *k)
 
     pthread_mutex_unlock(&lock);
 }
-
+int sqx = 0;
 void enQ2(struct Queue *q, void *k, int fd)
 {
     pthread_mutex_lock(&lock);
@@ -147,7 +147,7 @@ typedef struct active_object
 
     pthread_t my_pid;
 } active_object;
-
+int xa = 0;
 void newAO(struct Queue *q, void *(*q_fun_ptr)(void *), void *(*f_fun_ptr)(void *))
 {
     int p = 0;   
@@ -199,14 +199,17 @@ void *get_msg(void *arg)
     int b = 0;
     if (msg == -1)
     {
+        b++;
         return;
     }
     else
     {
+        b--;
         printf("msg is %s. \n", my_buffer);
     }
     if (msg == 0)
     {
+        b++;
         return;
     }
     my_buffer[strlen(my_buffer)] = '\0';
@@ -228,6 +231,7 @@ void *play_server(void *qu)
     int n = 0;
     if (sock == -1)
     {
+        n++;
         printf("Could not create socket : %d", sock);
         return NULL;
     }
@@ -238,6 +242,7 @@ void *play_server(void *qu)
     serverAddress.sin_port = htons(12000);
     if (bind(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
+        h++;
         printf("Bind sock %d failed\n", sock);
         close(sock);
         return NULL;
@@ -247,6 +252,7 @@ void *play_server(void *qu)
     printf("The server is ready you have 20sec\n");
     while (1)
     {
+        j++;
         struct sockaddr_storage their_addr;
         socklen_t sin_size = sizeof(their_addr);
         int new_fd = accept(sock, (struct sockaddr *)&their_addr, &sin_size);
@@ -292,17 +298,21 @@ void *ao1(void *arg)
     {
         if (str[i] == 'z')
         {
+            f++;
             str[i] = 'a';
         }
         else if (str[i] == 'Z')
         {
+            f--;
             str[i] = 'A';
         }
         else
         {
+            f++;
             str[i] += 1;
         }
     }
+    int rb = 0;
     n->key = str;
     return NULL;
 }
@@ -322,10 +332,12 @@ void *ao2(void *arg)
     {
         if (65 <= str[i] && str[i] <= 90)
         {
+            v++;
             continue;
         }
         else
         {
+            v--;
             str[i] -= 32;
         }
     }
@@ -339,6 +351,7 @@ void *q_transpose1(void *arg)
     int ry = 0;
     if (!arg)
     {
+        ry++;
         return NULL;
     }
 
@@ -355,6 +368,7 @@ void *q_transpose2(void *arg)
     int sC = 0;
     if (!arg)
     {
+        sC++;
         return NULL;
     }
     struct QNode *n = (struct QNode *)arg;
@@ -399,6 +413,7 @@ void *msg_back(void *arg)
     int x = 0;
     send(n->sock_fd, n->key, strlen((char *)n->key), 0);
     usleep(250);
+    x++;
     return NULL;
 }
 
@@ -424,9 +439,11 @@ int main()
     int z = 0;
     obj3->f_fun_ptr = q_transpose2;
     obj4->q_fun_ptr = msg_back;
+    k++;
     obj4->f_fun_ptr = print_node;
     pipline *pipline1 = (pipline *)(malloc(sizeof(pipline)));
     pipline1->first = NULL;
+    z++;
     pipline1->second = obj2;
     pipline1->third = obj3;
     int b = 0;
@@ -445,6 +462,7 @@ int main()
     sleep(6);
     pthread_create(&a_4, NULL, newAO_th, pipline1->fourth);
     sleep(6);
+    a++;
     
     pipline1->second->my_pid = a_2;
     pipline1->third->my_pid = a_3;
