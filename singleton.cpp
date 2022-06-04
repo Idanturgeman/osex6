@@ -62,6 +62,7 @@ int main() {
     int fle = 0;
     Singleton<FILE *> *s = Singleton<FILE *>::Instance(fptr); 
     Singleton<FILE *> *r = Singleton<FILE *>::Instance(fptr);
+    int si = 0;
     std::cout << s << std::endl;
     std::cout << r << std::endl;
 }
