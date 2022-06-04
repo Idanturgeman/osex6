@@ -23,14 +23,13 @@ public:
     int sglton = 0;
     void Destroy();
 };
+
+template<typename T>
+Singleton<T> *Singleton<T>::my_instance = 0;
+
 static int numOfSingeltons = 0;
 
 template<typename T>
-
-Singleton<T> *Singleton<T>::my_instance = 0;
-
-template<typename T>
-
 Singleton<T> *Singleton<T>::Instance(T temp) {
     int k = 0;
     if (my_instance == 0) {
