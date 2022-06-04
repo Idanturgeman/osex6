@@ -19,7 +19,6 @@
 #include <stdlib.h>
 
 static int sock1 = -1;
-
 void *receive(void *arg) {
     int rec = 0;
     char *my_buffer = (char *) calloc(2000, 1);
