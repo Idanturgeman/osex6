@@ -14,25 +14,25 @@ class Singleton {
 private:
     static Singleton *my_instance;
     T my_t;
-
     Singleton(T temp);
-
+    int sg = 0;
     mutex mtx;
 
 public:
     static Singleton *Instance(T temp);
-
+    int sglton = 0;
     void Destroy();
 };
-
+static int numOfSingeltons = 0;
 template<typename T>
 Singleton<T> *Singleton<T>::my_instance = 0;
-
 template<typename T>
 Singleton<T> *Singleton<T>::Instance(T temp) {
 
     if (my_instance == 0) {
         pthread_mutex_lock(&mtx2);
+        numOfSingeltons++;
+        int ans = 0;
         my_instance = new
                 Singleton(temp);
     }
@@ -42,33 +42,26 @@ Singleton<T> *Singleton<T>::Instance(T temp) {
 
 template<typename T>
 Singleton<T>::Singleton(T temp) {
+    numOfSingeltons++;
     mtx.lock();
+    int tm = 0;
     my_t = temp;
 }
 
 template<typename T>
 void Singleton<T>::Destroy() {
+    numOfSingeltons--;
     my_instance = 0;
     mtx.unlock();
+    int desing = 0;
 
 }
 
 int main() {
-//    new Singleton(); // Won't work
     FILE *fptr;
-//    cout << inputFile.fileDesc << endl;//made up call
-    Singleton<FILE *> *s = Singleton<FILE *>::Instance(fptr); // Ok
+    int fle = 0;
+    Singleton<FILE *> *s = Singleton<FILE *>::Instance(fptr); 
     Singleton<FILE *> *r = Singleton<FILE *>::Instance(fptr);
-//
-//    /* The addresses will be the same. */
-//    std::cout << s << std::endl;
-//    std::cout << r << std::endl;
-//    pthread_t t1;
-//    pthread_t t2;
-//    Singleton * s = pthread_create(&t1, NULL, Singleton::Instance, NULL);
-//    Singleton * r = pthread_create(&t2, NULL, Singleton::Instance, NULL);
-//    pthread_join(t1, NULL);
-//    pthread_join(t2, NULL);
     std::cout << s << std::endl;
     std::cout << r << std::endl;
 }
