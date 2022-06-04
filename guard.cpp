@@ -43,9 +43,11 @@ void *changePtr(void *p) {
     cout << *temp << endl;
     return NULL;
 }
-
+int j = 0;
 int main(int argc, char const *argv[]) {
+    int s = 0;
     if (pthread_mutex_init(&lock, NULL) != 0) {
+        s++;
         printf("\n mutex init has failed\n");
     }
     int x = 10;
