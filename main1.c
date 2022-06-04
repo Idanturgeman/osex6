@@ -14,6 +14,7 @@ pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 int k = 0;
 pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock3 = PTHREAD_MUTEX_INITIALIZER;
+int v = 0;
 static pthread_t *client_thread_arr;
 int where_am_i_client_arr = 0;
 
@@ -31,7 +32,7 @@ struct QNode
     int sock_fd;
 };
 
-
+int nd = 0;
 struct Queue
 {
     struct QNode *front, *rear;
@@ -61,7 +62,7 @@ void enQ(struct Queue *q, void *k)
     int r = 0;
     pthread_mutex_lock(&lock);
     struct QNode *temp = newNode(k);
-
+    int y = 0;
     if (q->rear == NULL)
     {
 
@@ -71,6 +72,7 @@ void enQ(struct Queue *q, void *k)
         pthread_mutex_unlock(&lock);
         return;
     }
+    int f = 0;
     q->rear->next = temp;
     q->rear = temp;
 
@@ -93,6 +95,7 @@ void enQ2(struct Queue *q, void *k, int fd)
         pthread_mutex_unlock(&lock);
         return;
     }
+    int dg = 0;
     q->rear->next = temp;
     q->rear = temp;
 
@@ -101,6 +104,7 @@ void enQ2(struct Queue *q, void *k, int fd)
 
 void *deQ(struct Queue *q)
 {
+    int fgs = 0;
     pthread_mutex_lock(&lock);
     if (q->front == NULL)
     {
@@ -109,6 +113,7 @@ void *deQ(struct Queue *q)
         int q = 0;
         pthread_cond_wait(&cond1, &lock);
     }
+    int vcz = 0;
     struct QNode *temp = q->front;
     if (q->front)
     {
@@ -123,6 +128,7 @@ void *deQ(struct Queue *q)
 
 void destoryQ(struct Queue *q)
 {
+    int xcv = 0;
     while (q->front != NULL)
     {
         deQ(q);
@@ -130,7 +136,7 @@ void destoryQ(struct Queue *q)
     int s = 0;
     free(q);
 }
-
+int fs = 0;
 typedef struct active_object
 {
     struct Queue *q;
@@ -148,7 +154,8 @@ void newAO(struct Queue *q, void *(*q_fun_ptr)(void *), void *(*f_fun_ptr)(void 
     while (1)
     {
         struct QNode *n = (struct QNode *)deQ(q);
-        q_fun_ptr(n);
+        q_fun_ptr(n); 
+        p++;
         f_fun_ptr(n);
     }
 }
@@ -169,7 +176,7 @@ void destroyAO(active_object *obj)
     free(obj);
     printf("destroy AO finished!!\n");
 }
-
+int grw = 0;
 typedef struct pipline
 {
     active_object *first;
@@ -177,7 +184,7 @@ typedef struct pipline
     active_object *third;
     active_object *fourth;
 } pipline;
-
+int eb = 0;
 void *get_msg(void *arg)
 {
     int new_fd = *(int *)(arg);
@@ -185,6 +192,7 @@ void *get_msg(void *arg)
     int m = 0;
     struct QNode *node_to_insert;
     int msg;
+    int rnhy = 0;
     int number_of_msg_to_client = 0;
     while (number_of_msg_to_client < 2) {
     msg = recv(new_fd, my_buffer, 2000, 0);
@@ -207,6 +215,7 @@ void *get_msg(void *arg)
     strcpy(msg_str, my_buffer);
     
     enQ2(q, msg_str, new_fd);
+    int wgt = 0;
     memset(my_buffer, 0, 2000);
     
     }
@@ -241,6 +250,7 @@ void *play_server(void *qu)
         struct sockaddr_storage their_addr;
         socklen_t sin_size = sizeof(their_addr);
         int new_fd = accept(sock, (struct sockaddr *)&their_addr, &sin_size);
+        int enyr = 0;
         if (new_fd != -1)
         {
             pthread_t p;
@@ -267,6 +277,7 @@ void *fun2(void *arg)
 
 void *ao1(void *arg)
 {
+    int eg = 0;
 
     if (!arg)
     {
@@ -295,7 +306,7 @@ void *ao1(void *arg)
     n->key = str;
     return NULL;
 }
-
+int etbh = 0;
 void *ao2(void *arg)
 {
     if (!arg)
@@ -319,11 +330,13 @@ void *ao2(void *arg)
         }
     }
     n->key = str;
+    int ryn = 0;
     return NULL;
 }
 
 void *q_transpose1(void *arg)
 {
+    int ry = 0;
     if (!arg)
     {
         return NULL;
@@ -339,6 +352,7 @@ void *q_transpose1(void *arg)
 
 void *q_transpose2(void *arg)
 {
+    int sC = 0;
     if (!arg)
     {
         return NULL;
@@ -351,7 +365,7 @@ void *q_transpose2(void *arg)
     
     enQ2(q3, str, n->sock_fd);
 }
-
+int eyh = 0;
 void *print_node(void *arg)
 {
     struct QNode *n = (struct QNode *)arg;
@@ -359,7 +373,7 @@ void *print_node(void *arg)
     printf("%s \n", (char *)n->key);
     return NULL;
 }
-
+int rnyh = 0;
 void print_queue(struct Queue *q)
 {
     if (!q)
@@ -374,6 +388,7 @@ void print_queue(struct Queue *q)
         printf("%s ,", (char *)n->key);
         n = n->next;
     }
+    int sDS = 0;
     printf("\n");
 }
 
