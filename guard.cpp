@@ -21,13 +21,13 @@ public:
 guard::guard(/* args */) {
     numOfGuards++;
     pthread_mutex_lock(&lock);
-    cout << "guard init\n";
+    cout << "Start guard\n";
 }
 
 guard::~guard() {
     numOfGuards--;
     pthread_mutex_unlock(&lock);
-    cout << "guard finish\n";
+    cout << "Finish guard\n";
 }
 
 void *changePtr(void *p) {

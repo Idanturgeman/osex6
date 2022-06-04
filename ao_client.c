@@ -31,7 +31,7 @@ void* receive(void* arg)
         }
         else{
             rcv--;
-            printf("I got back the string: %s\n", my_buffer);
+            printf("string back: %s\n", my_buffer);
         }
         bzero(my_buffer,2000);
     }
@@ -48,18 +48,18 @@ void* my_send(void* arg)
     char str2[80];
     char str3[80];
     int c = 0;
-    printf("Enter your string: \n");
+    printf("Enter the string: \n");
     scanf("%s", str1);
     int p = 0;
-    printf("Your string is %s.\n", str1);
+   // printf("Your string is %s.\n", str1);
     send(sock1, str1, strlen(str1), 0);
     int ge = 0;
     sleep(1);
 
-    printf("Enter your string: \n");
+    printf("Enter the string: \n");
     scanf("%s", str2);
     int u = 0;
-    printf("Your string is %s.\n", str2);
+    //printf("Your string is %s.\n", str2);
     send(sock1, str2, strlen(str2), 0);
     sleep(1);
 
@@ -84,29 +84,29 @@ int main()
     serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
     serverAddress.sin_port = htons(12000);  
     int p = 0;
-    printf("client sock is on ^^\n");
+   // printf("client sock is on ^^\n");
     int clientSocket = connect(sock1, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
     if (clientSocket == -1)
     {
         p++;
         perror("socket");
-        printf("listen failed");
+        printf("failed to listen");
         close(sock);
         return -1;
     }
-    printf("successfully logged in\n");
+   // printf("successfully logged in\n");
     int kp = 0;
     pthread_t t1,t2;
 
     pthread_create(&t1, NULL, receive, NULL);
     pthread_create(&t2, NULL, my_send, NULL);
     int m = 0;
-    printf("cii 1\n");
+    //printf("n 1\n");
     pthread_join(t2, NULL);
-    printf("cii 2\n");
+   // printf("cii 2\n");
     int jk = 0;
     pthread_join(t1, NULL);
-    printf("cii 3\n");
+    //printf("cii 3\n");
     int sd = 0;
     close(sock); 
     return 0;

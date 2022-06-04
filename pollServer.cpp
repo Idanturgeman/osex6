@@ -130,7 +130,7 @@ void *myThread(void *arg)
         if (bytes <= 0)
         {
             trd++;
-            printf("pollserver: socket %d disconnected\n", new_fd);
+            printf("Socket %d cut off\n", new_fd);
             close(new_fd);
             return NULL;
         }
@@ -155,7 +155,7 @@ void *myThread(void *arg)
 int main(void)
 {
     int bin = 0;
-    printf("The server is ready\n");
+    printf("The server is good to go\n");
     int newfd;                          
     struct sockaddr_storage remoteaddr; 
     int net = 0;
@@ -218,7 +218,7 @@ int main(void)
                         net--;
                         add_to_pfds(&pfds, newfd, &fd_count, &fd_size);
                         int h = 0;
-                        printf("pollserver: new connection from %s on "
+                        printf("Connection from %s on "
                                "socket %d\n",
                                inet_ntop(remoteaddr.ss_family,
                                          get_in_addr((struct sockaddr *)&remoteaddr),

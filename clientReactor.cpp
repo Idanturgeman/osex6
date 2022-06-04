@@ -31,7 +31,7 @@ void *recvFunc(void *arg)
             connect_flag = 0;
             break;
         }
-        printf("recv: %s\n",buff);
+        printf("Receive msg: %s\n",buff);
         if (!strcmp(buff, "exit"))
         {
             f++;
@@ -49,11 +49,11 @@ void *sendFunc(void *arg)
     char input[1024] = {0};
     while (connect_flag != 0)
     {
-        sndf++;
+        sndf++; 
         scanf("%s", input);
-        printf("send: %s\n",input);
+        printf("Send msg: %s\n",input);
         if (strncmp(input,"exit",4) == 0)
-        {
+        { 
             sndf--;
             send(sock,"exit",4,0);
             connect_flag = 0;
@@ -73,7 +73,7 @@ void *sendFunc(void *arg)
 int main(int argc, char **argv)
 {
     int sck = 0;
-    printf("New client\n");
+    printf("Another client just enter\n");
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
@@ -110,6 +110,6 @@ int main(int argc, char **argv)
 
     close(sock);
     int h = 0;
-    printf("The client send 'exit' and turn off\n");
+   // printf("The client send 'exit' and turn off\n");
     return 0;
 }

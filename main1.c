@@ -229,7 +229,7 @@ void *play_server(void *qu)
     if (sock == -1)
     {
         n++;
-        printf("Could not create socket : %d", sock);
+        printf("Socket created is failed : %d", sock);
         return NULL;
     }
     struct sockaddr_in serverAddress;
@@ -240,13 +240,13 @@ void *play_server(void *qu)
     if (bind(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
         h++;
-        printf("Bind sock %d failed please try again\n", sock);
+        printf("Sock bind %d failed please try again\n", sock);
         close(sock);
         return NULL;
     }
     listen(sock, 10);
     int j = 0;
-    printf("The server is ready\n");
+    printf("The server is good to go\n");
     while (1)
     {
         j++;
