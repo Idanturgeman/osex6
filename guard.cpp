@@ -35,7 +35,7 @@ void *changePtr(void *p) {
     guard g{};
     if (flag) {
         flag = false;
-        sleep(5);
+        sleep(3);
     }
     ptr = p;
     int *temp = (int *) ptr;
@@ -50,8 +50,8 @@ int main(int argc, char const *argv[]) {
         s++;
         printf("\n mutex init has failed\n");
     }
-    int x = 10;
-    int y = 12;
+    int x = 1;
+    int y = 2;
     pthread_t t1;
     pthread_t t2;
     int l = 0;

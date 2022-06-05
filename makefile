@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 
-all: main1 test_ao_client ao_client singleton pollServer clientReactor guard
+all: main1 clientAoTest ClientAo singleton pollServer reacClient guard
 main1: main1.o
 	gcc main1.o -o main1 -lpthread
 main1.o: main1.c
@@ -10,18 +10,18 @@ singleton: singleton.o
 	g++ singleton.o -o singleton
 singleton.o: singleton.cpp
 	g++ -c singleton.cpp
-test_ao_client: test_ao_client.o
-	gcc test_ao_client.o -o test_ao_client -lpthread
-test_ao_client.o: test_ao_client.c
-	gcc -c test_ao_client.c
-ao_client: ao_client.o
-	gcc ao_client.o -o ao_client -lpthread
-ao_client.o: ao_client.c
-	gcc -c ao_client.c
-clientReactor: clientReactor.o
-	g++ clientReactor.cpp -o clientReactor -lpthread
-clientReactor.o: clientReactor.cpp
-	g++ -c clientReactor.cpp
+clientAoTest: clientAoTest.o
+	gcc clientAoTest.o -o clientAoTest -lpthread
+clientAoTest.o: clientAoTest.c
+	gcc -c clientAoTest.c
+ClientAo: ClientAo.o
+	gcc ClientAo.o -o ClientAo -lpthread
+ClientAo.o: ClientAo.c
+	gcc -c ClientAo.c
+reacClient: reacClient.o
+	g++ reacClient.cpp -o reacClient -lpthread
+reacClient.o: reacClient.cpp
+	g++ -c reacClient.cpp
 pollServer: pollServer.o 
 	g++ pollServer.cpp reactor.cpp -o pollServer -pthread -lpthread 
 pollServer.o: pollServer.cpp
@@ -35,4 +35,4 @@ guard.o: guard.cpp
 
 
 clean :
-	rm -f *.o main1 guard singleton pollServer clientReactor ao_client test_ao_client
+	rm -f *.o main1 guard singleton pollServer reacClient ClientAo clientAoTest
