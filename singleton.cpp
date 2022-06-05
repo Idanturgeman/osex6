@@ -68,6 +68,8 @@ int main() {
     int fl = 0;
     Singleton<FILE *> *r = Singleton<FILE *>::Instance(fptr);
     int si = 0;
+    printf("Address pointer number 1:\t");
     std::cout << s << std::endl;
+    printf("Address pointer number 2:\t");
     std::cout << r << std::endl;
 }
