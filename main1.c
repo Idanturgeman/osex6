@@ -210,6 +210,7 @@ void *get_msg(void *arg)
         b++;
         return;
     }
+    
     my_buffer[strlen(my_buffer)] = '\0';
     char *msg_str = (char *)calloc(1, strlen(my_buffer));
     int v = 0;
